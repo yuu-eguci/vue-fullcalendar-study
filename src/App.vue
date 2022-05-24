@@ -68,6 +68,7 @@ export default {
           }
         ],
         editable: true,
+        eventResourceEditable: false,
         selectable: true,
         select: this.handleSelect,
         eventClick: function(info) {
