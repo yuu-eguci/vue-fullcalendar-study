@@ -1,17 +1,32 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <full-calendar :options="calendarOptions" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import '@fullcalendar/core/vdom' // solves problem with Vite
+import FullCalendar from '@fullcalendar/vue'
+import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    FullCalendar
+  },
+  data() {
+    return {
+      calendarOptions: {
+        plugins: [ resourceTimelinePlugin ],
+        initialView: 'resourceTimeline',
+        schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives'
+      }
+    }
+  },
+  methods: {
+    handleDateClick: function(arg) {
+      alert('date click! ' + arg.dateStr)
+    }
   }
 }
 </script>
