@@ -17,6 +17,9 @@ export default {
     FullCalendar
   },
   data() {
+    const now = new Date()
+    const today = now.toISOString().split('T')[0]
+
     return {
       calendarOptions: {
         plugins: [ resourceTimelinePlugin, interactionPlugin ],
@@ -30,38 +33,61 @@ export default {
         ],
         resources: [
           {
-            id: 'd',
-            name: '芥川賞作家 砂川文次'
+            id: 1,
+            name: '砂川文次'
           },
           {
-            id: 'c',
-            name: '芥川賞作家 石沢麻依',
+            id: 2,
+            name: '石沢麻依',
             eventColor: 'green'
           },
           {
-            id: 'e',
-            name: '芥川賞作家 李琴峰',
+            id: 3,
+            name: '李琴峰',
             eventColor: 'orange'
           }
         ],
-        events: 'https://fullcalendar.io/api/demo-feeds/events.json?single-day&for-resource-timeline',
+        events: [
+          {
+            resourceId: 1,
+            title: '希望のシフト',
+            start: `${today}T07:30:00+09:00`,
+            end: `${today}T09:30:00+09:00`
+          },
+          {
+            resourceId: 2,
+            title: '希望のシフト',
+            start: `${today}T10:00:00+09:00`,
+            end: `${today}T15:00:00+09:00`
+          },
+          {
+            resourceId: 3,
+            title: '希望のシフト',
+            start: `${today}T09:00:00+09:00`,
+            end: `${today}T14:00:00+09:00`
+          }
+        ],
         editable: true,
         selectable: true,
-        select: function(info) {
-          console.info('select')
-          console.info(info)
-        },
+        select: this.handleSelect,
         eventClick: function(info) {
           console.info('eventClick')
           console.info(info)
-          // change the border color just for fun
-          // info.el.style.borderColor = 'red';
         },
         schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives'
       }
     }
   },
   methods: {
+    handleSelect: function (info) {
+      this.calendarOptions.events.push({
+        resourceId: info.resource.id,
+        title: '実績',
+        start: info.startStr,
+        end: info.endStr,
+      })
+    },
+
     handleDateClick: function(arg) {
       alert('date click! ' + arg.dateStr)
     }
