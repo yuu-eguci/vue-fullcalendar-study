@@ -8,6 +8,7 @@
 import '@fullcalendar/core/vdom' // solves problem with Vite
 import FullCalendar from '@fullcalendar/vue'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
+import jaLocale from '@fullcalendar/core/locales/ja'
 
 export default {
   name: 'App',
@@ -19,6 +20,7 @@ export default {
       calendarOptions: {
         plugins: [ resourceTimelinePlugin ],
         initialView: 'resourceTimeline',
+        locale: jaLocale,
         schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives'
       }
     }
