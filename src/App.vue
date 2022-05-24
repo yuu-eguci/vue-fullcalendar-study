@@ -46,6 +46,11 @@ export default {
         ],
         events: 'https://fullcalendar.io/api/demo-feeds/events.json?single-day&for-resource-timeline',
         editable: true,
+        selectable: true,
+        select: function(info) {
+          console.info('select')
+          console.info(info)
+        },
         schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives'
       }
     }
