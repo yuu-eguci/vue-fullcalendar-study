@@ -51,6 +51,12 @@ export default {
           console.info('select')
           console.info(info)
         },
+        eventClick: function(info) {
+          console.info('eventClick')
+          console.info(info)
+          // change the border color just for fun
+          // info.el.style.borderColor = 'red';
+        },
         schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives'
       }
     }
