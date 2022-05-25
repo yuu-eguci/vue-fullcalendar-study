@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <full-calendar :options="calendarOptions" />
+    <full-calendar
+      ref="fullCalendar"
+      :options="calendarOptions"
+    />
   </div>
 </template>
 
@@ -85,20 +88,25 @@ export default {
   },
   methods: {
     handleSelect: function (info) {
-      this.calendarOptions.events.push({
+      // NOTE: 他にも this.calendarOptions.events.push する方法がある。
+      //       ……が、問題もある。 @fullcalendar/interaction によって編集したデータは
+      //       events には反映されない。 push によって再描画が発生すると、上記の編集はすべてリセットされる。
+      const calendarApi = this.$refs.fullCalendar.getApi()
+      calendarApi.addEventSource([{
         id: uuidv4(),
         resourceId: info.resource.id,
         title: '実績',
         start: info.startStr,
         end: info.endStr,
-      })
-      console.info(this.calendarOptions.events)
+      }])
     },
 
     handleEventClick: function (info) {
       if (window.confirm('このシフトを削除しますか?')) {
-        this.calendarOptions.events = this.calendarOptions.events.filter(x => x.id !== info.event.id)
-        console.info(this.calendarOptions.events)
+        // NOTE: push と同様にこれ↓で削除する方法がある。
+        //       this.calendarOptions.events = this.calendarOptions.events.filter(x => x.id !== info.event.id)
+        //       ただし問題も push と同様に発生する。
+        info.event.remove()
       }
     }
   }
