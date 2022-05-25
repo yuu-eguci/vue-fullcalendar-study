@@ -120,8 +120,15 @@ export default {
     },
 
     handleSaveClick: function () {
-      // TODO: ここで、編集済みの events をすべて取得できなければならない。
-      //       どうやる……?
+      // 編集済みの Events 一覧を取得できる。
+      const calendarApi = this.$refs.fullCalendar.getApi()
+      const objects = calendarApi.getEvents().map(function (event) {
+        const { id, startStr, endStr } = event
+        return {
+          id, startStr, endStr
+        }
+      })
+      console.table(objects)
     }
   }
 }
