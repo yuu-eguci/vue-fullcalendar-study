@@ -10,6 +10,7 @@ import FullCalendar from '@fullcalendar/vue'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import jaLocale from '@fullcalendar/core/locales/ja'
 import interactionPlugin from '@fullcalendar/interaction'
+const { v4: uuidv4 } = require('uuid')
 
 export default {
   name: 'App',
@@ -33,35 +34,38 @@ export default {
         ],
         resources: [
           {
-            id: 1,
+            id: '1',
             name: '砂川文次'
           },
           {
-            id: 2,
+            id: '2',
             name: '石沢麻依',
             eventColor: 'green'
           },
           {
-            id: 3,
+            id: '3',
             name: '李琴峰',
             eventColor: 'orange'
           }
         ],
         events: [
           {
-            resourceId: 1,
+            id: uuidv4(),
+            resourceId: '1',
             title: '希望のシフト',
             start: `${today}T07:30:00+09:00`,
             end: `${today}T09:30:00+09:00`
           },
           {
-            resourceId: 2,
+            id: uuidv4(),
+            resourceId: '2',
             title: '希望のシフト',
             start: `${today}T10:00:00+09:00`,
             end: `${today}T15:00:00+09:00`
           },
           {
-            resourceId: 3,
+            id: uuidv4(),
+            resourceId: '3',
             title: '希望のシフト',
             start: `${today}T09:00:00+09:00`,
             end: `${today}T14:00:00+09:00`
@@ -71,10 +75,7 @@ export default {
         eventResourceEditable: false,
         selectable: true,
         select: this.handleSelect,
-        eventClick: function(info) {
-          console.info('eventClick')
-          console.info(info)
-        },
+        eventClick: this.handleEventClick,
         schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives'
       }
     }
@@ -82,15 +83,20 @@ export default {
   methods: {
     handleSelect: function (info) {
       this.calendarOptions.events.push({
+        id: uuidv4(),
         resourceId: info.resource.id,
         title: '実績',
         start: info.startStr,
         end: info.endStr,
       })
+      console.info(this.calendarOptions.events)
     },
 
-    handleDateClick: function(arg) {
-      alert('date click! ' + arg.dateStr)
+    handleEventClick: function (info) {
+      if (window.confirm('このシフトを削除しますか?')) {
+        this.calendarOptions.events = this.calendarOptions.events.filter(x => x.id !== info.event.id)
+        console.info(this.calendarOptions.events)
+      }
     }
   }
 }
