@@ -54,21 +54,24 @@ export default {
             resourceId: '1',
             title: '希望のシフト',
             start: `${today}T07:30:00+09:00`,
-            end: `${today}T09:30:00+09:00`
+            end: `${today}T09:30:00+09:00`,
+            display: 'background'
           },
           {
             id: uuidv4(),
             resourceId: '2',
             title: '希望のシフト',
             start: `${today}T10:00:00+09:00`,
-            end: `${today}T15:00:00+09:00`
+            end: `${today}T15:00:00+09:00`,
+            display: 'background'
           },
           {
             id: uuidv4(),
             resourceId: '3',
             title: '希望のシフト',
             start: `${today}T09:00:00+09:00`,
-            end: `${today}T14:00:00+09:00`
+            end: `${today}T14:00:00+09:00`,
+            display: 'background'
           }
         ],
         editable: true,
