@@ -82,6 +82,15 @@ export default {
         selectable: true,
         select: this.handleSelect,
         eventClick: this.handleEventClick,
+        headerToolbar: {
+          end: 'today prev,next save'
+        },
+        customButtons: {
+          save: {
+            text: '保存',
+            click: this.handleSaveClick
+          }
+        },
         schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives'
       }
     }
@@ -108,6 +117,11 @@ export default {
         //       ただし問題も push と同様に発生する。
         info.event.remove()
       }
+    },
+
+    handleSaveClick: function () {
+      // TODO: ここで、編集済みの events をすべて取得できなければならない。
+      //       どうやる……?
     }
   }
 }
