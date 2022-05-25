@@ -120,6 +120,10 @@ export default {
     },
 
     handleSaveClick: function () {
+      if (!window.confirm('これで保存しますか?')) {
+        return
+      }
+
       // 編集済みの Events 一覧を取得できる。
       const calendarApi = this.$refs.fullCalendar.getApi()
       const objects = calendarApi.getEvents().map(function (event) {
