@@ -3,6 +3,10 @@ vue-fullcalendar-study
 
 ✌🏽 In this repository, I tried to study Vue-cli + Vuetify + FullCalendar + GitHub Pages.
 
+## Demo
+
+https://user-images.githubusercontent.com/28250432/181431083-c3c76dae-d309-429f-a259-563f3fc7ffa8.mp4
+
 ## TIL: Vue + FullCalendar
 
 - Vue + FullCalendar やるときはとりあえずここ↓を見て始める
