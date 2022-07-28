@@ -60,7 +60,8 @@ export default {
             title: '希望のシフト',
             start: `${today}T07:30:00+09:00`,
             end: `${today}T09:30:00+09:00`,
-            display: 'background'
+            display: 'background',
+            classNames: ['heightUp'],
           },
           {
             id: uuidv4(),
@@ -68,7 +69,8 @@ export default {
             title: '希望のシフト',
             start: `${today}T10:00:00+09:00`,
             end: `${today}T15:00:00+09:00`,
-            display: 'background'
+            display: 'background',
+            classNames: ['heightUp'],
           },
           {
             id: uuidv4(),
@@ -76,7 +78,8 @@ export default {
             title: '希望のシフト',
             start: `${today}T09:00:00+09:00`,
             end: `${today}T14:00:00+09:00`,
-            display: 'background'
+            display: 'background',
+            classNames: ['heightUp'],
           }
         ],
         editable: true,
@@ -109,6 +112,7 @@ export default {
         title: '実績',
         start: info.startStr,
         end: info.endStr,
+        classNames: ['heightUp'],
       }])
     },
 
@@ -148,5 +152,15 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+/* events の高さを調節します。 */
+.heightUp {
+  height: 4em;
+}
+
+/* timeline view の行の高さを調節します。 */
+.fc-resource-timeline td {
+  height: 4em;
 }
 </style>
