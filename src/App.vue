@@ -31,6 +31,9 @@ export default {
         locale: jaLocale,
         // タイムラインのヘッダを固定します。
         stickyHeaderDates: true,
+        longPressDelay: 0,
+        eventLongPressDelay: 0,
+        selectLongPressDelay: 0,
         resourceAreaColumns: [
           {
             field: 'name',
