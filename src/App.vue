@@ -59,6 +59,8 @@ export default {
           }
         ],
         events: [
+          // NOTE: これら既存イベントは、 unclickable としたい。
+          //       が、そういうオプションはない。
           {
             id: uuidv4(),
             resourceId: '1',
@@ -122,6 +124,11 @@ export default {
     },
 
     handleEventClick: function (info) {
+      // background event は変更不可とする。
+      if (info.event.display === 'background') {
+        return
+      }
+
       if (window.confirm('このシフトを削除しますか?')) {
         // NOTE: push と同様にこれ↓で削除する方法がある。
         //       this.calendarOptions.events = this.calendarOptions.events.filter(x => x.id !== info.event.id)
