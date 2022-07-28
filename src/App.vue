@@ -1,5 +1,8 @@
 <template>
   <div id="app">
+    <h1>
+      v1.2
+    </h1>
     <full-calendar
       ref="fullCalendar"
       :options="calendarOptions"
@@ -32,8 +35,6 @@ export default {
         // タイムラインのヘッダを固定します。
         stickyHeaderDates: true,
         longPressDelay: 0,
-        eventLongPressDelay: 0,
-        selectLongPressDelay: 0,
         resourceAreaColumns: [
           {
             field: 'name',
@@ -152,9 +153,7 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 
 /* events の高さを調節します。 */
