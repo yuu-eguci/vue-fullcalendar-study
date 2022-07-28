@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1>
-      v1.2
+      v1.3
     </h1>
     <full-calendar
       ref="fullCalendar"
@@ -34,7 +34,8 @@ export default {
         locale: jaLocale,
         // タイムラインのヘッダを固定します。
         stickyHeaderDates: true,
-        longPressDelay: 0,
+        eventLongPressDelay: 500,
+        selectLongPressDelay: 100,
         resourceAreaColumns: [
           {
             field: 'name',
