@@ -29,6 +29,8 @@ export default {
         plugins: [ resourceTimelinePlugin, interactionPlugin ],
         initialView: 'resourceTimelineDay',
         locale: jaLocale,
+        // タイムラインのヘッダを固定します。
+        stickyHeaderDates: true,
         resourceAreaColumns: [
           {
             field: 'name',
