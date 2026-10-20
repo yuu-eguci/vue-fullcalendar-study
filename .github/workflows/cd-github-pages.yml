@@ -14,26 +14,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v7
 
-    - uses: actions/setup-node@v3
+    - uses: actions/setup-node@v7
       with:
-        node-version: 16.x
-        # NOTE: cache option を使いません。
-        #       actions/cache@v2 で node_modules をキャッシュしたほうが yarn install が高速で終わるためです。
+        node-version-file: .nvmrc
+        cache: npm
 
-    - uses: actions/cache@v3
-      id: node_modules_cache_id
-      with:
-        path: |
-          node_modules
-        key: node-v16.x-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
+    - run: npm ci
 
-    - run: yarn install
+    # 壊れたものをデプロイしないよう、 lint と test を通してから build します。
+    - run: npm run lint
 
-    - run: yarn build
+    - run: npm test
 
-    - uses: peaceiris/actions-gh-pages@v3
+    - run: npm run build
+
+    - uses: peaceiris/actions-gh-pages@v4
       with:
         personal_token: ${{ secrets.PERSONAL_TOKEN }}
         publish_dir: ./dist

@@ -1,0 +1,11 @@
+services:
+  app:
+    build: .
+    ports:
+      - "5173:5173"
+    volumes:
+      # 画面のソースコードをマウントして、編集内容をすぐ反映します。
+      # それ以外 (package.json や設定ファイル) を変更したときは --build で image を作り直します。
+      - ./index.html:/app/index.html
+      - ./public:/app/public
+      - ./src:/app/src

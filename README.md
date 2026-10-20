@@ -1,7 +1,48 @@
 vue-fullcalendar-study
 ===
 
-✌🏽 In this repository, I tried to study Vue-cli + Vuetify + FullCalendar + GitHub Pages.
+✌🏽 In this repository, I tried to study Vue + Vite + FullCalendar + GitHub Pages.
+
+- Docker: 対応!
+- Node.js: 24!
+- Linter: ESLint 10 (eslint-plugin-vue)!
+- Test: Vitest, Playwright (e2e)!
+- Vue: 3.5!
+- Vite: 8!
+- FullCalendar: 6.1 (resource-timeline)!
+
+## パッと実行してみたい
+
+```bash
+docker compose up --build
+# --> http://localhost:5173/vue-fullcalendar-study/ を開く
+```
+
+lint, test, build も Docker で動かせる。
+package.json や設定ファイルを変えたら、 `docker compose build` で image を作り直す。
+
+```bash
+docker compose run --rm app npm run lint
+docker compose run --rm app npm test
+docker compose run --rm app npm run build
+```
+
+ブラウザ操作の e2e テスト (Playwright) は、ホストの Node.js 24 で動かす。
+build したものを `vite preview` で起動してテスト。
+
+```bash
+npm ci
+npx playwright install chromium
+npm run test:e2e
+
+# docker compose up で起動中のサーバに対してテストするとき
+BASE_URL=http://localhost:5173/vue-fullcalendar-study/ npm run test:e2e
+```
+
+GitHub Actions では push と Pull Request ごとに lint, test, build, e2e テストと、 Docker での起動確認を実行。
+main への push では GitHub Pages にもデプロイ。
+
+- https://yuu-eguci.github.io/vue-fullcalendar-study/
 
 ## Demo
 

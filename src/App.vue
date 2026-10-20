@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div class="app">
     <h1>
       v1.3
     </h1>
@@ -11,12 +11,18 @@
 </template>
 
 <script>
-import '@fullcalendar/core/vdom' // solves problem with Vite
-import FullCalendar from '@fullcalendar/vue'
+import FullCalendar from '@fullcalendar/vue3'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import jaLocale from '@fullcalendar/core/locales/ja'
 import interactionPlugin from '@fullcalendar/interaction'
-const { v4: uuidv4 } = require('uuid')
+import { v4 as uuidv4 } from 'uuid'
+import {
+  createEventFromSelection,
+  createInitialEvents,
+  isDeletable,
+  toLocalDateString,
+  toSaveRecords
+} from './calendar.js'
 
 export default {
   name: 'App',
@@ -24,8 +30,7 @@ export default {
     FullCalendar
   },
   data() {
-    const now = new Date()
-    const today = now.toISOString().split('T')[0]
+    const today = toLocalDateString(new Date())
 
     return {
       calendarOptions: {
@@ -58,37 +63,9 @@ export default {
             eventColor: 'orange'
           }
         ],
-        events: [
-          // NOTE: これら既存イベントは、 unclickable としたい。
-          //       が、そういうオプションはない。
-          {
-            id: uuidv4(),
-            resourceId: '1',
-            title: '希望のシフト',
-            start: `${today}T07:30:00+09:00`,
-            end: `${today}T09:30:00+09:00`,
-            display: 'background',
-            classNames: ['heightUp'],
-          },
-          {
-            id: uuidv4(),
-            resourceId: '2',
-            title: '希望のシフト',
-            start: `${today}T10:00:00+09:00`,
-            end: `${today}T15:00:00+09:00`,
-            display: 'background',
-            classNames: ['heightUp'],
-          },
-          {
-            id: uuidv4(),
-            resourceId: '3',
-            title: '希望のシフト',
-            start: `${today}T09:00:00+09:00`,
-            end: `${today}T14:00:00+09:00`,
-            display: 'background',
-            classNames: ['heightUp'],
-          }
-        ],
+        // NOTE: これら既存イベントは、 unclickable としたい。
+        //       が、そういうオプションはない。
+        events: createInitialEvents(today, uuidv4),
         editable: true,
         eventResourceEditable: false,
         selectable: true,
@@ -113,19 +90,12 @@ export default {
       //       ……が、問題もある。 @fullcalendar/interaction によって編集したデータは
       //       events には反映されない。 push によって再描画が発生すると、上記の編集はすべてリセットされる。
       const calendarApi = this.$refs.fullCalendar.getApi()
-      calendarApi.addEventSource([{
-        id: uuidv4(),
-        resourceId: info.resource.id,
-        title: '実績',
-        start: info.startStr,
-        end: info.endStr,
-        classNames: ['heightUp'],
-      }])
+      calendarApi.addEventSource([createEventFromSelection(info, uuidv4)])
     },
 
     handleEventClick: function (info) {
       // background event は変更不可とする。
-      if (info.event.display === 'background') {
+      if (!isDeletable(info.event)) {
         return
       }
 
@@ -144,20 +114,14 @@ export default {
 
       // 編集済みの Events 一覧を取得できる。
       const calendarApi = this.$refs.fullCalendar.getApi()
-      const objects = calendarApi.getEvents().map(function (event) {
-        const { id, startStr, endStr } = event
-        return {
-          id, startStr, endStr
-        }
-      })
-      console.table(objects)
+      console.table(toSaveRecords(calendarApi.getEvents()))
     }
   }
 }
 </script>
 
 <style>
-#app {
+.app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
