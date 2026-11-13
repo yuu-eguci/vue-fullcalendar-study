@@ -1,0 +1,13 @@
+{
+  // Node.js で動く設定ファイルと e2e テストの型チェック設定です。
+  "extends": "@vue/tsconfig/tsconfig.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "lib": ["ES2024", "DOM"],
+    "types": ["node"],
+    // eslint.config.js は JavaScript のまま型チェックします。
+    "allowJs": true,
+    "checkJs": true
+  },
+  "include": ["vite.config.ts", "playwright.config.ts", "eslint.config.js", "e2e/**/*.ts"]
+}

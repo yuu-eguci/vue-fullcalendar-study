@@ -23,7 +23,9 @@ jobs:
 
     - run: npm ci
 
-    # 壊れたものをデプロイしないよう、 lint と test を通してから build します。
+    # 壊れたものをデプロイしないよう、 typecheck, lint, test を通してから build します。
+    - run: npm run typecheck
+
     - run: npm run lint
 
     - run: npm test
