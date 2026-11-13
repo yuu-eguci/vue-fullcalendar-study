@@ -10,7 +10,9 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+import type { CalendarApi, CalendarOptions, DateSelectArg, EventClickArg } from '@fullcalendar/core'
 import FullCalendar from '@fullcalendar/vue3'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import jaLocale from '@fullcalendar/core/locales/ja'
@@ -22,14 +24,14 @@ import {
   isDeletable,
   toLocalDateString,
   toSaveRecords
-} from './calendar.js'
+} from './calendar'
 
-export default {
+export default defineComponent({
   name: 'App',
   components: {
     FullCalendar
   },
-  data() {
+  data(): { calendarOptions: CalendarOptions } {
     const today = toLocalDateString(new Date())
 
     return {
@@ -69,15 +71,15 @@ export default {
         editable: true,
         eventResourceEditable: false,
         selectable: true,
-        select: this.handleSelect,
-        eventClick: this.handleEventClick,
+        select: info => this.handleSelect(info),
+        eventClick: info => this.handleEventClick(info),
         headerToolbar: {
           end: 'today prev,next save'
         },
         customButtons: {
           save: {
             text: '保存',
-            click: this.handleSaveClick
+            click: () => this.handleSaveClick()
           }
         },
         schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives'
@@ -85,15 +87,26 @@ export default {
     }
   },
   methods: {
-    handleSelect: function (info) {
+    // ref="fullCalendar" の Calendar API を返します。
+    getCalendarApi(): CalendarApi {
+      return (this.$refs.fullCalendar as InstanceType<typeof FullCalendar>).getApi()
+    },
+
+    handleSelect: function (info: DateSelectArg) {
+      // resource timeline view での選択なので resource は必ずあります。
+      const { resource, startStr, endStr } = info
+      if (!resource) {
+        return
+      }
+
       // NOTE: 他にも this.calendarOptions.events.push する方法がある。
       //       ……が、問題もある。 @fullcalendar/interaction によって編集したデータは
       //       events には反映されない。 push によって再描画が発生すると、上記の編集はすべてリセットされる。
-      const calendarApi = this.$refs.fullCalendar.getApi()
-      calendarApi.addEventSource([createEventFromSelection(info, uuidv4)])
+      const calendarApi = this.getCalendarApi()
+      calendarApi.addEventSource([createEventFromSelection({ resource, startStr, endStr }, uuidv4)])
     },
 
-    handleEventClick: function (info) {
+    handleEventClick: function (info: EventClickArg) {
       // background event は変更不可とする。
       if (!isDeletable(info.event)) {
         return
@@ -113,11 +126,11 @@ export default {
       }
 
       // 編集済みの Events 一覧を取得できる。
-      const calendarApi = this.$refs.fullCalendar.getApi()
+      const calendarApi = this.getCalendarApi()
       console.table(toSaveRecords(calendarApi.getEvents()))
     }
   }
-}
+})
 </script>
 
 <style>

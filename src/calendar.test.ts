@@ -32,7 +32,7 @@ describe('createInitialEvents', () => {
   })
 
   const ids = ['a', 'b', 'c']
-  const events = createInitialEvents('2026-10-21', () => ids.shift())
+  const events = createInitialEvents('2026-10-21', () => ids.shift() as string)
 
   it('リソースごとに "希望のシフト" を background event として作ります', () => {
     expect(events).toEqual([

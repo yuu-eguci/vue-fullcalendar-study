@@ -76,6 +76,6 @@ https://user-images.githubusercontent.com/28250432/181431083-c3c76dae-d309-429f-
 - ちょくちょく `Calendar::` という表記を目にするが、 Vue では refs を使ってアクセスする。
     - `const calendarApi = this.$refs.fullCalendar.getApi()`
     - TypeScript では `this.$refs.fullCalendar` が `unknown` なので、 `InstanceType<typeof FullCalendar>` として扱う。
+- ただし Vue で Calendar API を使うことについては "Hopefully you won’t need to do it often" って書いてる。だから Vue では raw data をガンガン操作するほうがいいのかも。このリポジトリでは、 "Calendar API を使うほうが FullCalendar の思想に合っているのかな?" と思ってそちらで進めたけど。
 - TypeScript の型は FullCalendar 自身が提供している。 `CalendarOptions`, `DateSelectArg`, `EventClickArg`, `EventApi` などは `@fullcalendar/core` から import する。
     - resource 関係 (`DateSelectArg.resource` など) の型は `@fullcalendar/resource-timeline` (が内部で読み込む `@fullcalendar/resource`) を import すると追加される。
-- ただし Vue で Calendar API を使うことについては "Hopefully you won’t need to do it often" って書いてる。だから Vue では raw data をガンガン操作するほうがいいのかも。このリポジトリでは、 "Calendar API を使うほうが FullCalendar の思想に合っているのかな?" と思ってそちらで進めたけど。
