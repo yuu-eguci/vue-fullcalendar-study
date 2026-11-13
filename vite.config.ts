@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
@@ -7,7 +8,7 @@ export default defineConfig({
   base: '/vue-fullcalendar-study/',
   test: {
     // e2e/ は Playwright で実行します。
-    include: ['src/**/*.test.js'],
+    include: ['src/**/*.test.ts'],
     // UTC と日付がずれる時間帯の挙動を確認できるよう、日本時間で実行します。
     env: { TZ: 'Asia/Tokyo' }
   }

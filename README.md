@@ -5,7 +5,8 @@ vue-fullcalendar-study
 
 - Docker: 対応!
 - Node.js: 24!
-- Linter: ESLint 10 (eslint-plugin-vue)!
+- TypeScript: 6.0 (vue-tsc で型チェック)!
+- Linter: ESLint 10 (eslint-plugin-vue, typescript-eslint)!
 - Test: Vitest, Playwright (e2e)!
 - Vue: 3.5!
 - Vite: 8!
@@ -18,10 +19,11 @@ docker compose up --build
 # --> http://localhost:5173/vue-fullcalendar-study/ を開く
 ```
 
-lint, test, build も Docker で動かせる。
-package.json や設定ファイルを変えたら、 `docker compose build` で image を作り直す。
+typecheck, lint, test, build も Docker で動かせる。
+package.json や設定ファイル (tsconfig など) を変えたら、 `docker compose build` で image を作り直す。
 
 ```bash
+docker compose run --rm app npm run typecheck
 docker compose run --rm app npm run lint
 docker compose run --rm app npm test
 docker compose run --rm app npm run build
@@ -39,7 +41,7 @@ npm run test:e2e
 BASE_URL=http://localhost:5173/vue-fullcalendar-study/ npm run test:e2e
 ```
 
-GitHub Actions では push と Pull Request ごとに lint, test, build, e2e テストと、 Docker での起動確認を実行。
+GitHub Actions では push と Pull Request ごとに typecheck, lint, test, build, e2e テストと、 Docker での起動確認を実行。
 main への push では GitHub Pages にもデプロイ。
 
 - https://yuu-eguci.github.io/vue-fullcalendar-study/
@@ -73,4 +75,7 @@ https://user-images.githubusercontent.com/28250432/181431083-c3c76dae-d309-429f-
         - https://fullcalendar.io/docs/Calendar-getEvents
 - ちょくちょく `Calendar::` という表記を目にするが、 Vue では refs を使ってアクセスする。
     - `const calendarApi = this.$refs.fullCalendar.getApi()`
+    - TypeScript では `this.$refs.fullCalendar` が `unknown` なので、 `InstanceType<typeof FullCalendar>` として扱う。
 - ただし Vue で Calendar API を使うことについては "Hopefully you won’t need to do it often" って書いてる。だから Vue では raw data をガンガン操作するほうがいいのかも。このリポジトリでは、 "Calendar API を使うほうが FullCalendar の思想に合っているのかな?" と思ってそちらで進めたけど。
+- TypeScript の型は FullCalendar 自身が提供している。 `CalendarOptions`, `DateSelectArg`, `EventClickArg`, `EventApi` などは `@fullcalendar/core` から import する。
+    - resource 関係 (`DateSelectArg.resource` など) の型は `@fullcalendar/resource-timeline` (が内部で読み込む `@fullcalendar/resource`) を import すると追加される。

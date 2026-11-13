@@ -1,13 +1,21 @@
-import { describe, expect, it } from 'vitest'
+import type { EventApi, EventInput } from '@fullcalendar/core'
+import { describe, expect, expectTypeOf, it } from 'vitest'
 import {
   createEventFromSelection,
   createInitialEvents,
   isDeletable,
   toLocalDateString,
-  toSaveRecords
-} from './calendar.js'
+  toSaveRecords,
+  type SaveRecord,
+  type SelectionInfo
+} from './calendar'
 
 describe('toLocalDateString', () => {
+  it('Date を受け取り、文字列を返します', () => {
+    expectTypeOf(toLocalDateString).parameters.toEqualTypeOf<[Date]>()
+    expectTypeOf(toLocalDateString).returns.toEqualTypeOf<string>()
+  })
+
   it('ローカル時刻の日付を返します (UTC ではまだ前日の時間帯)', () => {
     expect(toLocalDateString(new Date(2026, 9, 21, 3, 0))).toBe('2026-10-21')
   })
@@ -18,8 +26,13 @@ describe('toLocalDateString', () => {
 })
 
 describe('createInitialEvents', () => {
+  it('YYYY-MM-DD 形式の日付と id の生成関数を受け取り、 FullCalendar の EventInput を返します', () => {
+    expectTypeOf(createInitialEvents).parameters.toEqualTypeOf<[string, () => string]>()
+    expectTypeOf(createInitialEvents).returns.toExtend<EventInput[]>()
+  })
+
   const ids = ['a', 'b', 'c']
-  const events = createInitialEvents('2026-10-21', () => ids.shift())
+  const events = createInitialEvents('2026-10-21', () => ids.shift() as string)
 
   it('リソースごとに "希望のシフト" を background event として作ります', () => {
     expect(events).toEqual([
@@ -55,6 +68,12 @@ describe('createInitialEvents', () => {
 })
 
 describe('createEventFromSelection', () => {
+  it('resource のある選択範囲を受け取り、 FullCalendar の EventInput を返します', () => {
+    expectTypeOf<SelectionInfo>().toHaveProperty('resource').toEqualTypeOf<{ id: string }>()
+    expectTypeOf(createEventFromSelection).parameter(1).toEqualTypeOf<() => string>()
+    expectTypeOf(createEventFromSelection).returns.toExtend<EventInput>()
+  })
+
   it('選択範囲とリソースから "実績" イベントを作ります', () => {
     const info = {
       resource: { id: '2' },
@@ -73,6 +92,11 @@ describe('createEventFromSelection', () => {
 })
 
 describe('isDeletable', () => {
+  it('EventApi を受け取ります', () => {
+    expectTypeOf(isDeletable).toBeCallableWith({} as EventApi)
+    expectTypeOf(isDeletable).returns.toEqualTypeOf<boolean>()
+  })
+
   it('background event は削除できません', () => {
     expect(isDeletable({ display: 'background' })).toBe(false)
   })
@@ -83,6 +107,12 @@ describe('isDeletable', () => {
 })
 
 describe('toSaveRecords', () => {
+  it('EventApi の一覧を受け取り、 SaveRecord の一覧を返します', () => {
+    expectTypeOf(toSaveRecords).toBeCallableWith([] as EventApi[])
+    expectTypeOf(toSaveRecords).returns.toEqualTypeOf<SaveRecord[]>()
+    expectTypeOf<SaveRecord>().toEqualTypeOf<{ id: string, startStr: string, endStr: string }>()
+  })
+
   it('保存用に id, startStr, endStr だけを取り出します', () => {
     const events = [
       { id: 'a', startStr: 's1', endStr: 'e1', title: '実績', display: 'auto' },
